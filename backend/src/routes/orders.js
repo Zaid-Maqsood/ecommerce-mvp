@@ -1,9 +1,8 @@
 const express = require('express');
-const { PrismaClient } = require('@prisma/client');
 const auth = require('../middleware/auth');
 
 const router = express.Router();
-const prisma = new PrismaClient();
+const prisma = require('../lib/prisma');
 
 const SHIPPING_COST = parseFloat(process.env.SHIPPING_COST || 5);
 const LOYALTY_POINTS_PER_ORDER = parseInt(process.env.LOYALTY_POINTS_PER_ORDER || 10);
