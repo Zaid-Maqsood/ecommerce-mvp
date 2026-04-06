@@ -1,0 +1,38 @@
+# Environment files
+.env
+.env.*
+*.env
+
+# Text/notes files
+*.txt
+
+# Claude
+.claude/
+
+# Dependencies
+node_modules/
+**/node_modules/
+
+# Build output
+dist/
+build/
+**/dist/
+**/build/
+
+# Prisma generated
+backend/node_modules/.prisma/
+
+# Logs
+*.log
+npm-debug.log*
+
+# OS files
+.DS_Store
+Thumbs.db
+
+# IDE
+.vscode/
+.idea/
+
+# Uploads (user-generated content)
+backend/uploads/
