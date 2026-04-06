@@ -13,8 +13,7 @@ const uploadRoutes = require('./routes/upload');
 const app = express();
 
 // Middleware
-const allowedOrigin = process.env.CORS_ORIGIN || 'http://localhost:5173';
-app.use(cors({ origin: allowedOrigin }));
+app.use(cors());
 app.use(express.json());
 
 // Serve uploaded images
