@@ -2,7 +2,10 @@ require('dotenv').config();
 const { PrismaClient } = require('@prisma/client');
 const bcrypt = require('bcryptjs');
 
-const prisma = new PrismaClient();
+const url = new URL(process.env.DATABASE_URL || '');
+url.searchParams.set('schema', 'ecommerce');
+url.searchParams.set('connection_limit', '1');
+const prisma = new PrismaClient({ datasources: { db: { url: url.toString() } } });
 
 async function main() {
   console.log('Seeding production database...');
