@@ -25,6 +25,8 @@ export default function AdminDashboard() {
       setStats(statsRes.data);
       setOrders(ordersRes.data);
       setProducts(productsRes.data);
+    }).catch((err) => {
+      console.error('Admin dashboard load failed:', err.response?.status, err.response?.data);
     }).finally(() => setLoading(false));
   }, []);
 

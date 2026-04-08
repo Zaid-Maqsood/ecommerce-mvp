@@ -1,15 +1,14 @@
 const { PrismaClient } = require('@prisma/client');
 
-// Ensure the ecommerce schema is always used, even when DO injects DATABASE_URL without it
-let dbUrl = process.env.DATABASE_URL || '';
-if (!dbUrl.includes('schema=')) {
-  dbUrl += (dbUrl.includes('?') ? '&' : '?') + 'schema=ecommerce';
-}
+// Cap connections to 1 — DO managed PostgreSQL has a very low connection limit
+// Always use the ecommerce schema (multiple schemas share one DB)
+const url = new URL(process.env.DATABASE_URL || '');
+url.searchParams.set('schema', 'ecommerce');
+url.searchParams.set('connection_limit', '1');
 
-// Single shared instance across all routes — prevents connection pool exhaustion
 const prisma = new PrismaClient({
   datasources: {
-    db: { url: dbUrl },
+    db: { url: url.toString() },
   },
 });
 
