@@ -69,8 +69,14 @@ router.put('/:id', auth, admin, async (req, res) => {
 
 // DELETE /api/products/:id — admin only
 router.delete('/:id', auth, admin, async (req, res) => {
+  const id = parseInt(req.params.id);
   try {
-    await prisma.product.delete({ where: { id: parseInt(req.params.id) } });
+    const orderItemCount = await prisma.orderItem.count({ where: { productId: id } });
+    if (orderItemCount > 0) {
+      return res.status(409).json({ message: 'Cannot delete a product that has been ordered. Deactivate it by setting stock to 0 instead.' });
+    }
+    await prisma.cartItem.deleteMany({ where: { productId: id } });
+    await prisma.product.delete({ where: { id } });
     res.json({ message: 'Product deleted' });
   } catch (err) {
     if (err.code === 'P2025') return res.status(404).json({ message: 'Product not found' });

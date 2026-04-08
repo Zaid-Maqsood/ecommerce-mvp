@@ -71,8 +71,8 @@ export default function AdminDashboard() {
     try {
       await api.delete(`/api/products/${id}`);
       setProducts((prev) => prev.filter((p) => p.id !== id));
-    } catch {
-      alert('Failed to delete product');
+    } catch (err) {
+      alert(err.response?.data?.message || 'Failed to delete product');
     }
   };
 
@@ -183,12 +183,19 @@ export default function AdminDashboard() {
           <h2 className="section-title">All Orders</h2>
           <div className="table-scroll">
             <table className="admin-table">
-              <thead><tr><th>#</th><th>Customer</th><th>Total</th><th>Address</th><th>Date</th><th>Status</th></tr></thead>
+              <thead><tr><th>#</th><th>Customer</th><th>Items</th><th>Total</th><th>Address</th><th>Date</th><th>Status</th></tr></thead>
               <tbody>
                 {orders.map((order) => (
                   <tr key={order.id}>
                     <td>{order.id}</td>
                     <td>{order.user?.email}</td>
+                    <td>
+                      {order.items?.map((item) => (
+                        <div key={item.id} style={{ whiteSpace: 'nowrap' }}>
+                          {item.product?.name} × {item.quantity} <span style={{ color: 'var(--muted)' }}>(${item.price.toFixed(2)} ea)</span>
+                        </div>
+                      ))}
+                    </td>
                     <td>${order.totalAmount.toFixed(2)}</td>
                     <td className="address-cell">{order.address}</td>
                     <td>{new Date(order.createdAt).toLocaleDateString()}</td>
